@@ -87,7 +87,7 @@ def set_udev_files(data_files, dest="/etc/udev/rules.d/", src=None):
     data_files.append((dest, src))
 
 
-def get_data_files(name, version, fullname):  # pylint: disable=R0912
+def get_data_files(name, version, fullname, sysroot):  # pylint: disable=R0912
     """
     Determine data_files according to distro name, version and init system type
     """
@@ -127,6 +127,18 @@ def get_data_files(name, version, fullname):  # pylint: disable=R0912
             if version.startswith("7.1"):
                 # TODO this is a mitigation to systemctl bug on 7.1
                 set_sysv_files(data_files)
+    elif name == 'ewaol':  # never set by auto-detection
+        set_bin_files(data_files, dest=os.path.join(sysroot, agent_bin_path),
+                          src=["bin/py3/waagent", "bin/waagent2.0"])
+        set_conf_files(data_files, dest=os.path.join(sysroot, "/etc"))
+        set_logrotate_files(data_files, dest=os.path.join(sysroot, "/etc/logrotate.d"))
+        set_udev_files(data_files, dest=os.path.join(sysroot, "/etc/udev/rules.d/"))
+        set_systemd_files(data_files, dest=os.path.join(sysroot, systemd_dir_path),
+                              src=[                                                                                                                                                                                                                                                                                                                                                        
+                                  "init/redhat/py2/waagent.service",                                                                                                                                                                                                                                                                                                                       
+                                  "init/azure.slice",                                                                                                                                                                                                                                                                                                                                      
+                                  "init/azure-vmextensions.slice"                                                                                                                                                                                                                                                                                                                          
+                              ])
     elif name == 'arch':
         set_bin_files(data_files, dest=agent_bin_path)
         set_conf_files(data_files, src=["config/arch/waagent.conf"])
@@ -263,6 +275,7 @@ class install(_install):  # pylint: disable=C0103
         ('lnx-distro-fullname=', None, 'target Linux distribution full name'),
         ('register-service', None, 'register as startup service and start'),
         ('skip-data-files', None, 'skip data files installation'),
+        ('sysroot', None, 'destination sysroot for install'),
     ]
 
     def initialize_options(self):
@@ -273,6 +286,7 @@ class install(_install):  # pylint: disable=C0103
         self.lnx_distro_fullname = DISTRO_FULL_NAME
         self.register_service = False
         self.skip_data_files = False
+	self.sysroot = '/'
         # pylint: enable=attribute-defined-outside-init
 
     def finalize_options(self):
@@ -281,7 +295,7 @@ class install(_install):  # pylint: disable=C0103
             return
 
         data_files = get_data_files(self.lnx_distro, self.lnx_distro_version,
-                                    self.lnx_distro_fullname)
+                                    self.lnx_distro_fullname, self.sysroot)
         self.distribution.data_files = data_files
         self.distribution.reinitialize_command('install_data', True)
 
