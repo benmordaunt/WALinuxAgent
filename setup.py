@@ -273,9 +273,9 @@ class install(_install):  # pylint: disable=C0103
         ('lnx-distro=', None, 'target Linux distribution'),
         ('lnx-distro-version=', None, 'target Linux distribution version'),
         ('lnx-distro-fullname=', None, 'target Linux distribution full name'),
+        ('sysroot=', None, 'destination sysroot for install'),
         ('register-service', None, 'register as startup service and start'),
         ('skip-data-files', None, 'skip data files installation'),
-        ('sysroot', None, 'destination sysroot for install'),
     ]
 
     def initialize_options(self):
