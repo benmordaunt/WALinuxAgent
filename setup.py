@@ -286,7 +286,7 @@ class install(_install):  # pylint: disable=C0103
         self.lnx_distro_fullname = DISTRO_FULL_NAME
         self.register_service = False
         self.skip_data_files = False
-	self.sysroot = '/'
+        self.sysroot = '/'
         # pylint: enable=attribute-defined-outside-init
 
     def finalize_options(self):
