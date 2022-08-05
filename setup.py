@@ -128,12 +128,12 @@ def get_data_files(name, version, fullname, sysroot):  # pylint: disable=R0912
                 # TODO this is a mitigation to systemctl bug on 7.1
                 set_sysv_files(data_files)
     elif name == 'ewaol':  # never set by auto-detection
-        set_bin_files(data_files, dest=os.path.join(sysroot, agent_bin_path),
+        set_bin_files(data_files, dest=os.path.join(sysroot, agent_bin_path[1:]),
                           src=["bin/py3/waagent", "bin/waagent2.0"])
-        set_conf_files(data_files, dest=os.path.join(sysroot, "/etc"))
-        set_logrotate_files(data_files, dest=os.path.join(sysroot, "/etc/logrotate.d"))
-        set_udev_files(data_files, dest=os.path.join(sysroot, "/etc/udev/rules.d/"))
-        set_systemd_files(data_files, dest=os.path.join(sysroot, systemd_dir_path),
+        set_conf_files(data_files, dest=os.path.join(sysroot, "etc"))
+        set_logrotate_files(data_files, dest=os.path.join(sysroot, "etc/logrotate.d"))
+        set_udev_files(data_files, dest=os.path.join(sysroot, "etc/udev/rules.d/"))
+        set_systemd_files(data_files, dest=os.path.join(sysroot, systemd_dir_path[1:]),
                               src=[                                                                                                                                                                                                                                                                                                                                                        
                                   "init/redhat/py2/waagent.service",                                                                                                                                                                                                                                                                                                                       
                                   "init/azure.slice",                                                                                                                                                                                                                                                                                                                                      
