@@ -87,7 +87,7 @@ def set_udev_files(data_files, dest="/etc/udev/rules.d/", src=None):
     data_files.append((dest, src))
 
 
-def get_data_files(name, version, fullname, sysroot):  # pylint: disable=R0912
+def get_data_files(name, version, fullname):  # pylint: disable=R0912
     """
     Determine data_files according to distro name, version and init system type
     """
@@ -293,7 +293,7 @@ class install(_install):  # pylint: disable=C0103
             return
 
         data_files = get_data_files(self.lnx_distro, self.lnx_distro_version,
-                                    self.lnx_distro_fullname, self.sysroot)
+                                    self.lnx_distro_fullname)
         self.distribution.data_files = data_files
         self.distribution.reinitialize_command('install_data', True)
 
