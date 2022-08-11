@@ -128,12 +128,12 @@ def get_data_files(name, version, fullname, sysroot):  # pylint: disable=R0912
                 # TODO this is a mitigation to systemctl bug on 7.1
                 set_sysv_files(data_files)
     elif name == 'ewaol':  # never set by auto-detection
-        set_bin_files(data_files, dest=os.path.join(sysroot, agent_bin_path[1:]),
+        set_bin_files(data_files, dest=agent_bin_path,
                           src=["bin/py3/waagent", "bin/waagent2.0"])
-        set_conf_files(data_files, dest=os.path.join(sysroot, "etc"))
-        set_logrotate_files(data_files, dest=os.path.join(sysroot, "etc/logrotate.d"))
-        set_udev_files(data_files, dest=os.path.join(sysroot, "etc/udev/rules.d/"))
-        set_systemd_files(data_files, dest=os.path.join(sysroot, systemd_dir_path[1:]),
+        set_conf_files(data_files)
+        set_logrotate_files(data_files)
+        set_udev_files(data_files)
+        set_systemd_files(data_files, dest=systemd_dir_path,
                               src=[                                                                                                                                                                                                                                                                                                                                                        
                                   "init/redhat/py2/waagent.service",                                                                                                                                                                                                                                                                                                                       
                                   "init/azure.slice",                                                                                                                                                                                                                                                                                                                                      
@@ -273,7 +273,6 @@ class install(_install):  # pylint: disable=C0103
         ('lnx-distro=', None, 'target Linux distribution'),
         ('lnx-distro-version=', None, 'target Linux distribution version'),
         ('lnx-distro-fullname=', None, 'target Linux distribution full name'),
-        ('sysroot=', None, 'destination sysroot for install'),
         ('register-service', None, 'register as startup service and start'),
         ('skip-data-files', None, 'skip data files installation'),
     ]
@@ -286,7 +285,6 @@ class install(_install):  # pylint: disable=C0103
         self.lnx_distro_fullname = DISTRO_FULL_NAME
         self.register_service = False
         self.skip_data_files = False
-        self.sysroot = '/'
         # pylint: enable=attribute-defined-outside-init
 
     def finalize_options(self):
